@@ -1,6 +1,7 @@
 import { chromium } from 'playwright';
 import { rm, mkdir } from 'fs/promises';
 import path from 'path';
+import { spawn } from 'child_process';
 
 const FPS          = 24;
 const DURATION_S   = 11;
@@ -55,4 +56,24 @@ for (let i = 0; i < FRAME_COUNT; i++) {
 
 await browser.close();
 console.log(`Captured ${FRAME_COUNT} frames to ${FRAMES_DIR}`);
-//console.log('Smoke screenshot written to /app/public/smoke.png');
+
+function runFfmpeg() {
+    return new Promise((resolve, reject) => {
+        const proc = spawn('ffmpeg', [
+            '-framerate', '24',
+            '-i', `${FRAMES_DIR}/frame_%04d.png`,
+            '-c:v', 'libwebp_anim',
+            '-quality', '85',
+            '-lossless', '0',
+            '-loop', '0',
+            '/app/public/output.webp',
+        ], { stdio: 'inherit' });
+        proc.on('close', code => code === 0 ? resolve() : reject(new Error(`ffmpeg exited ${code}`)));
+    });
+}
+
+await runFfmpeg();
+
+// Only clean up frames after confirmed success
+await rm(FRAMES_DIR, { recursive: true, force: true });
+console.log('output.webp written to /app/public/output.webp');
