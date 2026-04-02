@@ -39,11 +39,13 @@ await mkdir(FRAMES_DIR, { recursive: true });
 // Pause the timeline before any seeking
 await page.evaluate(() => { window.animTimeline.pause(); });
 
+const svgElement = page.locator('svg');
+
 for (let i = 0; i < FRAME_COUNT; i++) {
     const t = i / FPS;
     const framePath = path.join(FRAMES_DIR, `frame_${String(i).padStart(4, '0')}.png`);
     await page.evaluate((t) => { window.animTimeline.seek(t); }, t);
-    await page.screenshot({ path: framePath });
+    await svgElement.screenshot({ path: framePath });
     if (i % FPS === 0) {                                                                                                   
       console.log(`frame ${i} / ${FRAME_COUNT}`);                                                                        
     }     
