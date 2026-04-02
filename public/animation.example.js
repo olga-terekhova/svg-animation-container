@@ -1,4 +1,4 @@
-fetch("file.svg")
+fetch("example.svg")
     .then(r => r.text())
     .then(svg => {
         document.getElementById("svg-container").innerHTML = svg;
