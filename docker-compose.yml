@@ -1,0 +1,20 @@
+services:
+  gsap-viewer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gsap-viewer
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./public:/app/public  # live-edit without rebuild
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
