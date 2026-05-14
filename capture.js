@@ -4,9 +4,13 @@ import path from 'path';
 import { spawn } from 'child_process';
 
 const FPS          = 24;
-const DURATION_S   = 11;
+const DURATION_S   = parseFloat(process.argv[2]);
+if (!process.argv[2] || isNaN(DURATION_S) || DURATION_S <= 0) {
+    console.error('Usage: node capture.js <duration_seconds>');
+    process.exit(1);
+}
 const FRAMES_DIR   = '/app/public/frames';
-const FRAME_COUNT  = Math.round(FPS * DURATION_S);  // 264
+const FRAME_COUNT  = Math.round(FPS * DURATION_S);
 const HEALTH_URL = 'http://localhost:3000/health';
 const PAGE_URL   = 'http://localhost:3000/';
 const TIMEOUT_MS = 30_000;

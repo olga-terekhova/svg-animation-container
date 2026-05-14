@@ -51,13 +51,7 @@ Open `http://localhost:3000/`. The animation plays in a loop. Iterate by editing
 
 ### 6. Set the capture duration
 
-Open `capture.js` and update `DURATION_S` to match your animation's full cycle length:
-
-```js
-const DURATION_S = 11;   // change this to match your timeline
-```
-
-For a `yoyo: true` timeline, the full cycle is:
+Calculate the full cycle length of your animation. For a `yoyo: true` timeline:
 
 ```
 (forward duration) + repeatDelay + (reverse duration) + repeatDelay
@@ -65,18 +59,12 @@ For a `yoyo: true` timeline, the full cycle is:
 
 Example: 5 s forward with `repeatDelay: 0.5` → `5 + 0.5 + 5 + 0.5 = 11 s`.
 
-Because `capture.js` is baked into the image (not volume-mounted), a rebuild is required after changing it:
-
-```
-docker compose build && docker compose up -d
-```
-
-> **TODO:** make `DURATION_S` configurable via an environment variable so rebuilds are not needed.
-
 ### 7. Capture
 
+Pass the duration (in seconds) as an argument:
+
 ```
-docker compose exec gsap-viewer node capture.js
+docker compose exec gsap-viewer node capture.js 11
 ```
 
 This:
