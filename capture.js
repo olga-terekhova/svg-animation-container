@@ -5,8 +5,11 @@ import { spawn } from 'child_process';
 
 const FPS          = 24;
 const DURATION_S   = parseFloat(process.argv[2]);
-if (!process.argv[2] || isNaN(DURATION_S) || DURATION_S <= 0) {
-    console.error('Usage: node capture.js <duration_seconds>');
+const SVG_WIDTH    = parseInt(process.argv[3], 10);
+const SVG_HEIGHT   = parseInt(process.argv[4], 10);
+if (!process.argv[2] || isNaN(DURATION_S) || DURATION_S <= 0 ||
+    isNaN(SVG_WIDTH) || SVG_WIDTH <= 0 || isNaN(SVG_HEIGHT) || SVG_HEIGHT <= 0) {
+    console.error('Usage: node capture.js <duration_seconds> <width> <height>');
     process.exit(1);
 }
 const FRAMES_DIR   = '/app/public/frames';
@@ -31,7 +34,7 @@ async function waitForServer() {
 const browser = await chromium.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
-const page = await browser.newPage();
+const page = await browser.newPage({ viewport: { width: SVG_WIDTH, height: SVG_HEIGHT } });
 
 await waitForServer();
 

@@ -61,10 +61,10 @@ Example: 5 s forward with `repeatDelay: 0.5` → `5 + 0.5 + 5 + 0.5 = 11 s`.
 
 ### 7. Capture
 
-Pass the duration (in seconds) as an argument:
+Pass the duration (in seconds) and the SVG's pixel dimensions as arguments:
 
 ```
-docker compose exec gsap-viewer node capture.js 11
+docker compose exec gsap-viewer node capture.js 11 1400 600
 ```
 
 This:
